@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model repositories {
+  id             Int      @id @default(autoincrement())
+  topic          String
+  name           String?
+  owner          String
+  ownerType      String
+  fullName       String
+  description    String?
+  ogImage        String?
+  license        String?
+  isArchived     Boolean
+  isForked       Boolean
+  size           String
+  language       String?
+  tags           String
+  openIssues     Int
+  forks          Int
+  stars          Int
+  watchers       Int
+  hasWiki        Boolean
+  hasPages       Boolean
+  hasSponsorship Boolean
+  createdAt      DateTime @db.Timestamp(6)
+  updatedAt      DateTime @db.Timestamp(6)
+}
