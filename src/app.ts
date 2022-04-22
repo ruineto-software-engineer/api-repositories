@@ -1,6 +1,7 @@
 import express, { json, Request, Response } from 'express';
 import { prisma } from './database.js';
 import { RelationalJson, Converter, OutputGenerator } from 'json-conversion-tool';
+import yaml from 'json-to-pretty-yaml';
 import fs from 'fs';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -34,7 +35,7 @@ app.get('/repositories/csv', async (req: Request, res: Response) => {
 		const outputGenerator = new OutputGenerator(relationalJson);
 		const csv = outputGenerator.generateCsv();
 
-    fs.writeFile('most-famous-sponsored-repos.csv', csv, 'utf8', function(err) {
+		fs.writeFile('most-famous-sponsored-repos.csv', csv, 'utf8', function(err) {
 			if (err) {
 				console.log('An error occured while writing CSV to File.');
 				return console.log(err);
@@ -44,6 +45,40 @@ app.get('/repositories/csv', async (req: Request, res: Response) => {
 		});
 
 		res.sendStatus(200);
+	} catch (error) {
+		console.log(error);
+		res.sendStatus(500);
+	}
+});
+
+app.get('/repositories/yaml', async (req: Request, res: Response) => {
+	try {
+		const repositories = await prisma.repositories.findMany({
+			where: {
+				language: 'TypeScript'
+			},
+			take: 10
+		});
+
+		const json = JSON.stringify(repositories);
+		fs.writeFile('typescript-repos.json', json, 'utf8', function(err) {
+			if (err) {
+				console.log('An error occured while writing JSON Object to File.');
+				return console.log(err);
+			}
+
+			console.log('JSON file has been saved.');
+		});
+
+		const data = yaml.stringify(json);
+    fs.writeFile('react-typescript-repos.yaml', data, 'utf8', function(err) {
+			if (err) {
+				console.log('An error occured while writing YAML to File.');
+				return console.log(err);
+			}
+
+			console.log('YAML file has been saved.');
+		});
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
