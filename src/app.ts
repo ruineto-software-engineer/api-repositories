@@ -1,7 +1,7 @@
 import express, { json, Request, Response } from 'express';
 import { prisma } from './database.js';
 import { RelationalJson, Converter, OutputGenerator } from 'json-conversion-tool';
-import yaml from 'json-to-pretty-yaml';
+import YAML from 'json-to-pretty-yaml';
 import fs from 'fs';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -61,7 +61,7 @@ app.get('/repositories/yaml', async (req: Request, res: Response) => {
 		});
 
 		const json = JSON.stringify(repositories);
-		fs.writeFile('typescript-repos.json', json, 'utf8', function(err) {
+	  fs.writeFile('typescript-repos.json', json, 'utf8', function(err) {
 			if (err) {
 				console.log('An error occured while writing JSON Object to File.');
 				return console.log(err);
@@ -70,8 +70,8 @@ app.get('/repositories/yaml', async (req: Request, res: Response) => {
 			console.log('JSON file has been saved.');
 		});
 
-		const data = yaml.stringify(json);
-    fs.writeFile('react-typescript-repos.yaml', data, 'utf8', function(err) {
+		const yaml = YAML.stringify(JSON.parse(json));
+    fs.writeFile('react-typescript-repos.yaml', yaml, 'utf8', function(err) {
 			if (err) {
 				console.log('An error occured while writing YAML to File.');
 				return console.log(err);
