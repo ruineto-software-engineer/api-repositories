@@ -44,7 +44,7 @@ app.get('/repositories/csv', async (req: Request, res: Response) => {
 			console.log('CSV file has been saved.');
 		});
 
-		res.sendStatus(200);
+		res.sendStatus(201);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
@@ -79,6 +79,8 @@ app.get('/repositories/yaml', async (req: Request, res: Response) => {
 
 			console.log('YAML file has been saved.');
 		});
+
+    res.sendStatus(201);
 	} catch (error) {
 		console.log(error);
 		res.sendStatus(500);
